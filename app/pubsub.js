@@ -12,7 +12,7 @@ const CHANNELS = {
     TRANSACTION : 'TRANSACTION'
 };
 class PubSub{
-    constructor({ blockchain, transactionPool }){
+    constructor({ blockchain, transactionPool, wallet }){
         this.blockchain = blockchain;
         this.transactionPool = transactionPool;
         this.wallet = wallet;
