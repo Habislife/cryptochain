@@ -84,10 +84,10 @@ describe('Transaction', ()=>{
     });
 
     describe('update()',()=>{
-        let origianlSignature, originalSenderOutput, nextRecipient, nextAmount;
+        let originalSignature, originalSenderOutput, nextRecipient, nextAmount;
 
         beforeEach(()=>{
-            origianlSignature = transaction.input.signature;
+            originalSignature = transaction.input.signature;
             originalSenderOutput = transaction.outputMap[senderWallet.publicKey];
             nextRecipient = 'next-recipient';
             nextAmount = 50;
@@ -113,7 +113,7 @@ describe('Transaction', ()=>{
         });
 
         it('re-signs the transaction',()=>{
-            expect(transaction.input.signature).not.toEqual(origianlSignature);
+            expect(transaction.input.signature).not.toEqual(originalSignature);
         });
     });
 });
