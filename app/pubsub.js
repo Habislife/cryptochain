@@ -8,11 +8,14 @@ secretKey: 'sec-c-Yzc2N2FkMTAtZGRiNi00NDJkLWFlYzItZDFlODQyZWM3ZTdi'
 
 const CHANNELS = {
     TEST : 'TEST',
-    BLOCKCHAIN : 'BLOCKCHAIN'
+    BLOCKCHAIN : 'BLOCKCHAIN',
+    TRANSACTION : 'TRANSACTION'
 };
 class PubSub{
-    constructor({ blockchain }){
+    constructor({ blockchain, transactionPool }){
         this.blockchain = blockchain;
+        this.transactionPool = transactionPool;
+        this.wallet = wallet;
         this.pubnub = new Pubnub(credentials);
         this.pubnub.subscribe({channels: Object.values(CHANNELS)});
 
@@ -25,8 +28,19 @@ class PubSub{
                 console.log(`Message receieved. Channel: ${channel}. Message: ${message}.`);
                 const parsedMessage = JSON.parse(message);
 
-                if(channel === CHANNELS.BLOCKCHAIN){
-                    this.blockchain.replaceChain(parsedMessage);
+                switch(channel){
+                    case CHANNELS.BLOCKCHAIN:
+                        this.blockchain.replaceChain(parsedMessage);
+                        break;
+                    case CHANNELS.TRANSACTION:
+                        if (!this.transactionPool.existingTransaction({
+                            inputAddress: this.wallet.publicKey
+                          })) {
+                            this.transactionPool.setTransaction(parsedMessage);
+                          }
+                        break;
+                    default:
+                        return;
                 }
             }
         };
@@ -44,6 +58,12 @@ class PubSub{
         this.pubnub.publish({
             channel: CHANNELS.BLOCKCHAIN,
             message: JSON.stringify(this.blockchain.chain)
+        });
+    }
+    broadcastTransaction(transaction){
+        this.pubnub.publish({
+            channel: CHANNELS.TRANSACTION,
+            message: JSON.stringify(transaction)
         });
     }
 } 
