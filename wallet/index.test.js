@@ -3,6 +3,7 @@ const { verifySignature } = require('../util');
 const Transaction = require('./transaction');
 const Blockchain = require('../blockchain');
 const { STARTING_BALANCE } = require('../config');
+const { calculateBalance } = require('./index');
 
 describe('Wallet',()=>{
     let wallet;
@@ -66,6 +67,23 @@ describe('Wallet',()=>{
             });
 
         });
+
+        describe('and a chain is passed', ()=>{
+    it('calls `Wallet.calculateBalance`',()=>{
+        const calculateBalanceMock = jest.fn();
+
+        const originalCalculateBalance = Wallet.calculateBalance;
+        Wallet.calculateBalance = calculateBalanceMock;
+
+        wallet.createTransaction({
+            recipient: 'foo',
+            amount: 10,
+            chain : new Blockchain().chain
+        });
+        expect(calculateBalanceMock).toHaveBeenCalled();
+        Wallet.calculateBalance = originalCalculateBalance;
+    });
+});
     });
 
     describe('calculateBalance()',()=>{
