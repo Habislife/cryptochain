@@ -9,7 +9,7 @@
     "dev": "nodemon index.js",
     "dev-peer": "cross-env GENERATE_PEER_PORT='true' nodemon index.js",
     "start-redis": "redis-server --daemonize yes",
-    "build"
+    "build-client": "parcel build client/src/index.html  --out-dir client/dist"
   },
   "jest": {
     "testEnvironment": "node"
@@ -28,8 +28,6 @@
     "express": "^4.16.3",
     "hex-to-binary": "^1.0.1",
     "pubnub": "^4.21.6",
-    "react": "^16.6.0",
-    "react-dom": "^16.6.0",
     "redis": "^2.8.0",
     "request": "^2.88.0",
     "uuid": "^3.3.2"
