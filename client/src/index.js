@@ -1,7 +1,4 @@
-import React from 'react';
-import { render } from 'react-dom';
+const React = require('react');
+const { render } = require('react-dom');
 
-render(
-<div>Cryptochain in React!</div>,
- document.getElementById('root')
- );
+render(<div>Hello</div>,document.getElementById('root'));
